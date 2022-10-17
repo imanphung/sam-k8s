@@ -25,7 +25,7 @@ pipeline {
             steps{
                 script {
                     docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-                        sh './gradlew -Pprod bootJar jib -Djib.to.image=antphungit/sam:latest'
+                        sh './gradlew bootJar jib -Pprod -PnodeInstall --no-daemon -Djib.to.image=antphungit/sam:latest'
                     }
                 }
             }
