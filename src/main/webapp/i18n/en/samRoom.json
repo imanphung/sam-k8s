@@ -1,0 +1,31 @@
+{
+  "samApp": {
+    "samRoom": {
+      "home": {
+        "title": "Rooms",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Room",
+        "createOrEditLabel": "Create or edit a Room",
+        "notFound": "No Rooms found"
+      },
+      "created": "A new Room is created with identifier {{ param }}",
+      "updated": "A Room is updated with identifier {{ param }}",
+      "deleted": "A Room is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Room {{ id }}?"
+      },
+      "detail": {
+        "title": "Room"
+      },
+      "id": "ID",
+      "meetingId": "Meeting Id",
+      "createdBy": "Created By",
+      "lessonId": "Lesson Id",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "status": "Status",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  }
+}

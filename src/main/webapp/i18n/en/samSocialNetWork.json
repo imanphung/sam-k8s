@@ -1,0 +1,29 @@
+{
+  "samApp": {
+    "samSocialNetWork": {
+      "home": {
+        "title": "Social Net Works",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Social Net Work",
+        "createOrEditLabel": "Create or edit a Social Net Work",
+        "notFound": "No Social Net Works found"
+      },
+      "created": "A new Social Net Work is created with identifier {{ param }}",
+      "updated": "A Social Net Work is updated with identifier {{ param }}",
+      "deleted": "A Social Net Work is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Social Net Work {{ id }}?"
+      },
+      "detail": {
+        "title": "Social Net Work"
+      },
+      "id": "ID",
+      "teacherId": "Teacher Id",
+      "accessToken": "Access Token",
+      "expiredTime": "Expired Time",
+      "type": "Type",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    }
+  }
+}

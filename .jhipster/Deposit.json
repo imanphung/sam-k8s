@@ -1,0 +1,45 @@
+{
+  "applications": ["samgw", "sam"],
+  "changelogDate": "20221017074427",
+  "clientRootFolder": "sam",
+  "databaseType": "sql",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "deposit",
+  "fields": [
+    {
+      "fieldName": "studentId",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "transferId",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "DepositStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CREATED,PENDDING,FINISHED,ERROR"
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "updatedAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "sam",
+  "name": "Deposit",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}

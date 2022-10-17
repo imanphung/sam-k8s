@@ -1,0 +1,11 @@
+{
+  "samApp": {
+    "DepositStatus": {
+      "null": "",
+      "CREATED": "CREATED",
+      "PENDDING": "PENDDING",
+      "FINISHED": "FINISHED",
+      "ERROR": "ERROR"
+    }
+  }
+}

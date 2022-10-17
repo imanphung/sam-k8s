@@ -1,0 +1,173 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sam
+  namespace: samhello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sam
+      version: 'v1'
+  template:
+    metadata:
+      labels:
+        app: sam
+        version: 'v1'
+    spec:
+      initContainers:
+        - name: init-ds
+          image: busybox:latest
+          command:
+            - '/bin/sh'
+            - '-c'
+            - |
+              while true
+              do
+                rt=$(nc -z -w 1 sam-postgresql 5432)
+                if [ $? -eq 0 ]; then
+                  echo "DB is UP"
+                  break
+                fi
+                echo "DB is not yet reachable;sleep for 10s before retry"
+                sleep 10
+              done
+      containers:
+        - name: sam-app
+          image: antphungit/sam
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod
+            - name: JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: secret
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://sam-postgresql.samhello.svc.cluster.local:5432/sam
+            - name: SPRING_DATASOURCE_USERNAME
+              value: sam
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sam-postgresql
+                  key: postgresql-password
+            - name: SPRING_LIQUIBASE_URL
+              value: jdbc:postgresql://sam-postgresql.samhello.svc.cluster.local:5432/sam
+            - name: SPRING_SLEUTH_PROPAGATION_KEYS
+              value: 'x-request-id,x-ot-span-context'
+            - name: JAVA_OPTS
+              value: ' -Xmx256m -Xms256m'
+            - name: SERVER_SHUTDOWN
+              value: graceful
+          resources:
+            requests:
+              memory: '512Mi'
+              cpu: '500m'
+            limits:
+              memory: '1Gi'
+              cpu: '1'
+          ports:
+            - name: http
+              containerPort: 8081
+          readinessProbe:
+            httpGet:
+              path: /management/health/readiness
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 15
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /management/health/liveness
+              port: http
+            initialDelaySeconds: 120
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sam
+  namespace: samhello
+  labels:
+    app: sam
+spec:
+  selector:
+    app: sam
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8081
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sam-postgresql
+  namespace: samhello
+  labels:
+    app: sam-postgresql
+type: Opaque
+data:
+  postgresql-password: M2Y0NzJkMzg4ZjFhZjhhNjVjYjBjYmMyZTFlMGZhMjBmZGViYTgwOWYyNDJiOGYwM2MwZWM1Y2FiN2M0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sam-postgresql
+  namespace: samhello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sam-postgresql
+  template:
+    metadata:
+      labels:
+        app: sam-postgresql
+    spec:
+      volumes:
+        - name: data
+          emptyDir: {}
+      containers:
+        - name: postgres
+          image: postgres:14.2
+          env:
+            - name: POSTGRES_USER
+              value: sam
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sam-postgresql
+                  key: postgresql-password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+          resources:
+            requests:
+              memory: '512Mi'
+              cpu: '500m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sam-postgresql
+  namespace: samhello
+spec:
+  selector:
+    app: sam-postgresql
+  ports:
+    - port: 5432
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jwt-secret
+  namespace: samhello
+type: Opaque
+data:
+  secret: TVdZMk16a3daalV4TkRJd01UaGtNR1V4WVRWbVlXSXlZMlJqWWpjek1EWmpNekV4TlRnek1qRmxZV1ZtWXpCa09ERmpObVptWkdGbE56QTFNREF3WmpNelpHSmlOVFU1TTJFeVptUTVNemd6TWpJd05qTTBaV1EzTm1FNU1qTTFPVFEzTVE9PQ==

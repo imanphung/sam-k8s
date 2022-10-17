@@ -1,0 +1,11 @@
+export enum RoomStatus {
+  CREATED = 'CREATED',
+
+  WAITING = 'WAITING',
+
+  INPROGRESS = 'INPROGRESS',
+
+  FINISHED = 'FINISHED',
+
+  ERROR = 'ERROR',
+}

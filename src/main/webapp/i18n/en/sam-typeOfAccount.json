@@ -1,0 +1,9 @@
+{
+  "samApp": {
+    "TypeOfAccount": {
+      "null": "",
+      "TEACHER": "TEACHER",
+      "STUDENT": "STUDENT"
+    }
+  }
+}
