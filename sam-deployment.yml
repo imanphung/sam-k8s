@@ -74,14 +74,14 @@ spec:
             httpGet:
               path: /management/health/readiness
               port: http
-            initialDelaySeconds: 20
+            initialDelaySeconds: 150
             periodSeconds: 15
             failureThreshold: 6
           livenessProbe:
             httpGet:
               path: /management/health/liveness
               port: http
-            initialDelaySeconds: 120
+            initialDelaySeconds: 150
 ---
 apiVersion: v1
 kind: Service
