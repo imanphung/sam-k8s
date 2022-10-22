@@ -24,7 +24,7 @@ spec:
             - |
               while true
               do
-                rt=$(nc -z -w 1 sam-postgresql 5432)
+                rt=$(nc -z -w 1 10.105.61.185 5432)
                 if [ $? -eq 0 ]; then
                   echo "DB is UP"
                   break
@@ -44,7 +44,7 @@ spec:
                   name: jwt-secret
                   key: secret
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://sam-postgresql.samhello.svc.cluster.local:5432/sam
+              value: jdbc:postgresql://10.105.61.185:5432/sam
             - name: SPRING_DATASOURCE_USERNAME
               value: sam
             - name: SPRING_DATASOURCE_PASSWORD
@@ -53,7 +53,7 @@ spec:
                   name: sam-postgresql
                   key: postgresql-password
             - name: SPRING_LIQUIBASE_URL
-              value: jdbc:postgresql://sam-postgresql.samhello.svc.cluster.local:5432/sam
+              value: jdbc:postgresql://10.105.61.185:5432/sam
             - name: SPRING_SLEUTH_PROPAGATION_KEYS
               value: 'x-request-id,x-ot-span-context'
             - name: JAVA_OPTS
@@ -97,6 +97,7 @@ spec:
     - name: http
       port: 80
       targetPort: 8081
+  type: NodePort
 ---
 apiVersion: v1
 kind: Secret
